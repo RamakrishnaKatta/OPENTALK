@@ -212,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     public void onStreamDropped(Session session, Stream stream) {
 
         Log.d(TAG, "onStreamDropped: Stream" + stream.getStreamId()+ "dropped from session" +session.getSessionId());
+        System.out.println("djfhdjhfdh");
         if (OpenTokConfig.SUBSCRIBE_TO_SELF){
             return;
         }
