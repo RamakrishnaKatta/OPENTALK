@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
 
         relativeLayout = (RelativeLayout)findViewById(R.id.publisher);
-        linearLayout   = (LinearLayout)findViewById(R.id.subscriber);
+        linearLayout   = (LinearLayout) findViewById(R.id.subscriber);
         requestPermisssion();
 
     }
@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     public void onStreamReceived(Session session, Stream stream) {
 
-        Log.d(TAG, "OnStreamReceived: Own Stream" + stream.getStreamId()+ "Receieved");
+        Log.d(TAG, "OnStreamReceived: New Stream" + stream.getStreamId()+ "in session"+ session.getSessionId());
         if (!OpenTokConfig.SUBSCRIBE_TO_SELF){
             return;
         }
@@ -240,7 +240,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     private void subscribeTostream(Stream stream) {
+        mSubscriber = new Subscriber(MainActivity.this, stream);
+        mSubscriber.setVideoListener(this);
+        mSession.subscribe(mSubscriber);
     }
+
 
     @Override
     public void onStreamDestroyed(PublisherKit publisherKit, Stream stream) {
@@ -284,11 +288,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     }
 
-    private void subscribeToStream(Stream stream) {
-        mSubscriber = new Subscriber(MainActivity.this, stream);
-        mSubscriber.setVideoListener(this);
-        mSession.subscribe(mSubscriber);
-    }
 
     private void disconnectSession() {
         if (mSession == null) {
@@ -303,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
 
         if (mPublisher != null) {
-            linearLayout.removeView(mPublisher.getView());
+            relativeLayout.removeView(mPublisher.getView());
             mSession.unpublish(mPublisher);
             mPublisher.destroy();
             mPublisher = null;
